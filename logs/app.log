@@ -63,3 +63,7 @@ httpx.ConnectError: [Errno 61] Connection refused
 2026-08-01 16:37:42,622 | INFO | app.agents.rag_agent | Query answered. Sources: ['acme_enterprise_data.xlsx']
 2026-08-01 16:37:54,269 | INFO | app.agents.rag_agent | Query answered. Sources: ['acme_enterprise_data.xlsx']
 2026-08-01 16:38:26,506 | INFO | app.vectorstore.chroma_store | Added 10 documents to vector store
+2026-08-01 17:34:24,681 | INFO | app.vectorstore.chroma_store | Added 10 documents to vector store
+2026-08-01 17:34:41,564 | INFO | app.agents.rag_agent | Query answered. Sources: ['acme_enterprise_data.xlsx']
+2026-08-01 17:34:53,867 | INFO | app.agents.rag_agent | Query answered. Sources: ['acme_enterprise_data.xlsx']
+2026-08-01 17:35:15,657 | INFO | app.agents.rag_agent | Query answered. Sources: ['acme_enterprise_data.xlsx']

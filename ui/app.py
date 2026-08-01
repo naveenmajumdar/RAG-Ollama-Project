@@ -1,7 +1,8 @@
 import streamlit as st
 import requests
+import os
 
-API_BASE = "http://localhost:8000"
+API_BASE = os.getenv("API_BASE_URL", "http://127.0.0.1:8000")
 
 st.set_page_config(page_title="RAG Ollama", page_icon="🔍", layout="wide")
 st.title("🔍 RAG with Ollama")
@@ -34,10 +35,15 @@ with st.sidebar:
 
     st.divider()
     try:
-        health = requests.get(f"{API_BASE}/health", timeout=5).json()
-        st.metric("Documents indexed", health.get("documents_indexed", "—"))
-    except Exception:
-        st.warning("API not reachable")
+        requests.get(f"{API_BASE}/health", timeout=3).raise_for_status()
+        st.success("API reachable")
+        try:
+            stats = requests.get(f"{API_BASE}/health/stats", timeout=3).json()
+            st.metric("Documents indexed", stats.get("documents_indexed", "—"))
+        except Exception:
+            st.metric("Documents indexed", "—")
+    except Exception as exc:
+        st.warning(f"API not reachable: {exc}")
 
 # ── Main: chat interface ───────────────────────────────────────────────────
 if "messages" not in st.session_state:
