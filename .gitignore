@@ -1,0 +1,22 @@
+# Environment
+.env
+.venv/
+venv/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+
+# Data & vector store
+chroma_db/
+uploads/
+
+# Logs
+*.log
+logs/
+
+# macOS
+.DS_Store
