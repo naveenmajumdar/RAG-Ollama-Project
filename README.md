@@ -117,6 +117,25 @@ python -m streamlit run ui/app.py
 
 ### 6. Quick troubleshooting
 - `API not reachable` in UI: make sure FastAPI is running and `/health` returns `{"status":"ok"}`.
+- `API not reachable: ... Read timed out`: the backend process may be stale. Restart FastAPI:
+```bash
+pkill -f "uvicorn app.api.main:app"
+.venv/bin/python -m uvicorn app.api.main:app --host 0.0.0.0 --port 8000 --reload
+```
+- Health check quick test:
+```bash
+curl -sS http://127.0.0.1:8000/health
+curl -sS http://127.0.0.1:8000/health/stats
+```
+- Port 8000 listener check (macOS/Linux):
+```bash
+lsof -iTCP:8000 -sTCP:LISTEN -n -P
+```
+- If Streamlit still shows stale API status, restart Streamlit:
+```bash
+pkill -f "streamlit run ui/app.py"
+.venv/bin/python -m streamlit run ui/app.py
+```
 - `streamlit: command not found`: run `python -m streamlit run ui/app.py` from the activated venv.
 - `Ollama is not running`: start Ollama and ensure models are available:
 ```bash
