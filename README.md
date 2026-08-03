@@ -115,6 +115,21 @@ python -m streamlit run ui/app.py
 3. Click **Ingest** and confirm a success message appears.
 4. Ask a simple question about the uploaded text and verify the response includes relevant content.
 
+### 5.1 Use sample data files from this repo
+You can test quickly with files in the `sample_data` folder:
+
+- `sample_data/acme_enterprise_data.xlsx`
+- `sample_data/AI Project Inventory.xlsx`
+- `sample_data/Q1 2026 Sales.xlsx`
+
+Steps:
+1. Open `http://localhost:8501`.
+2. In the sidebar, click upload and select one or more files from `sample_data/`.
+3. Click **Ingest** and wait for the success message with chunk count.
+4. Ask dataset-specific questions, for example:
+	- "What are the top sales entries in Q1 2026?"
+	- "List the projects in the AI inventory and their status."
+
 ### 6. Quick troubleshooting
 - `API not reachable` in UI: make sure FastAPI is running and `/health` returns `{"status":"ok"}`.
 - `API not reachable: ... Read timed out`: the backend process may be stale. Restart FastAPI:
