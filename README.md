@@ -55,7 +55,7 @@ You need **two terminal tabs** both with the venv activated (`source .venv/bin/a
 ```bash
 uvicorn app.api.main:app --reload
 ```
-- API base: http://localhost:8000
+- API base: http://127.0.0.1:8000
 - Interactive docs: http://localhost:8000/docs
 
 ### Terminal 2 — Streamlit UI
@@ -67,6 +67,63 @@ If you see `streamlit: command not found`, run Streamlit through the project ven
 .venv/bin/python -m streamlit run ui/app.py
 ```
 - UI: http://localhost:8501
+
+---
+
+## Testing Steps
+
+Run these checks after starting the backend and UI.
+
+### 1. Verify backend is reachable
+```bash
+curl -sS http://127.0.0.1:8000/health
+```
+Expected response:
+```json
+{"status":"ok"}
+```
+
+### 2. Verify vector store stats endpoint
+```bash
+curl -sS http://127.0.0.1:8000/health/stats
+```
+Expected response shape:
+```json
+{"documents_indexed":0}
+```
+(`documents_indexed` can be any non-negative integer depending on your ingested data.)
+
+### 3. Verify backend process is listening on port 8000 (macOS/Linux)
+```bash
+lsof -iTCP:8000 -sTCP:LISTEN -n -P
+```
+
+### 4. Verify UI can call the backend
+The Streamlit app uses:
+- `API_BASE_URL` environment variable if set
+- otherwise defaults to `http://127.0.0.1:8000`
+
+Optional override before launching Streamlit:
+```bash
+export API_BASE_URL=http://127.0.0.1:8000
+python -m streamlit run ui/app.py
+```
+
+### 5. End-to-end smoke test
+1. Open `http://localhost:8501`.
+2. Upload a small `.txt` file.
+3. Click **Ingest** and confirm a success message appears.
+4. Ask a simple question about the uploaded text and verify the response includes relevant content.
+
+### 6. Quick troubleshooting
+- `API not reachable` in UI: make sure FastAPI is running and `/health` returns `{"status":"ok"}`.
+- `streamlit: command not found`: run `python -m streamlit run ui/app.py` from the activated venv.
+- `Ollama is not running`: start Ollama and ensure models are available:
+```bash
+ollama pull llama3.2
+ollama pull nomic-embed-text
+```
+- `File exceeds size limit`: increase `MAX_FILE_SIZE_MB` in `.env` and restart FastAPI.
 
 ---
 
